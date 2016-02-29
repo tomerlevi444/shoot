@@ -141,19 +141,19 @@ You got the idea.
 	shoot update                          # Update browser list (WARNING: will override active browsers)
 	shoot version, --version, -v          # Shoot version
 
-### Using [ngrok](https://ngrok.com/)
+### Using [localtunnel](https://localtunnel.me/)
 
-In order to access your local development environment on [BrowserStack](https://www.browserstack.com/) you need to forward it somehow to the external world (a.k.a. the internet). [BrowserStack](https://www.browserstack.com/) has it's own forwarder, but [ngrok](https://ngrok.com/) is better. If you wanna use it:
+In order to access your local development environment on [BrowserStack](https://www.browserstack.com/) you need to forward it somehow to the external world (a.k.a. the internet). [BrowserStack](https://www.browserstack.com/) has it's own forwarder, but [localtunnel](https://localtunnel.me/) is better. If you wanna use it:
 
-1. Install it from [https://ngrok.com/download](https://ngrok.com/download)
+1. Install it: `npm install -g localtunnel`
 
 2. Enable subdomains by registering.
 
-3. Use the `Shoot::Ngrok` class in your test, like this:
+3. Use the `Shoot::LocalTunnel` class in your test, like this:
 
 ``` ruby
   def my_test
-    my_server = Shoot::Ngrok.new(12345)
+    my_server = Shoot::LocalTunnel.new(12345)
     visit my_server.url
   end
 ```
@@ -166,12 +166,10 @@ If you're using [pow](http://pow.cx), skip step 3 above and do it like this inst
 
 ``` ruby
   def my_test
-    my_server = Shoot::NgrokPow.new(:my_server_folder)
+    my_server = Shoot::LocalTunnelPow.new(:my_server_folder)
     visit my_server.url
   end
 ```
-
-NgrokPow will create another symlink of your server folder with a unique name and forward it correctly to [ngrok](https://ngrok.com/). This symlink will be properly removed at the end of the execution of shoot.
 
 ## Contributing
 
