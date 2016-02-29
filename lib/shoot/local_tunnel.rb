@@ -3,12 +3,12 @@ require 'forwardable'
 require 'securerandom'
 
 module Shoot
-  class Ngrok
+  class LocalTunnel
     extend Forwardable
     def_delegators :@process, :start, :stop, :exited?
 
     def initialize(port = 3000)
-      @process = ChildProcess.build("ngrok", "-log=stdout", "-subdomain=#{subdomain}", port.to_s)
+      @process = ChildProcess.build("lt", "--subdomain=#{subdomain}", "--port=#{port.to_s}")
       start
     end
 
@@ -17,7 +17,7 @@ module Shoot
     end
 
     def url
-      @url ||= "http://#{subdomain}.ngrok.com"
+      @url ||= "https://#{subdomain}.localtunnel.me"
     end
   end
 end
