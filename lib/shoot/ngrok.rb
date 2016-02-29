@@ -8,8 +8,14 @@ module Shoot
     def_delegators :@process, :start, :stop, :exited?
 
     def initialize(port = 3000)
-      @process = ChildProcess.build("ngrok", "-log=stdout", "-subdomain=#{subdomain}", port.to_s)
-      start
+      @process = ChildProcess.build("ngrok", "-log=stdout", port.to_s)
+      reader,writer = IO.pipe
+      server.io.stdout = writer
+
+      start.tap do |server|
+        match = reader.readpartial(8192).match(/http:\/\/[a-z0-9A-Z]+.ngrok.com/).to_s
+        @url = match and return unless match.empty?
+      end
     end
 
     def subdomain
@@ -17,7 +23,7 @@ module Shoot
     end
 
     def url
-      @url ||= "http://#{subdomain}.ngrok.com"
+      @url
     end
   end
 end
