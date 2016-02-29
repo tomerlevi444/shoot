@@ -13,8 +13,9 @@ module Shoot
       @process.io.stdout = writer
 
       start.tap do
-        match = reader.readpartial(8192).match(/http:\/\/[a-z0-9A-Z]+.ngrok.com/).to_s
-        @url = match and return unless match.empty?
+        while @url.nil? || @url.empty? do 
+          @url = reader.readline.match(/http:\/\/[a-z0-9A-Z]+.ngrok.com/).to_s
+        end
       end
     end
 
